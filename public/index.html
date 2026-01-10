@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oceń wizytę</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);height:100vh;display:flex;align-items:center;justify-content:center}.container{text-align:center}h1{color:white;font-size:3rem;margin-bottom:60px}.buttons{display:flex;gap:30px;justify-content:center}button{width:200px;height:250px;border:none;border-radius:20px;font-size:6rem;cursor:pointer;transition:transform .2s}button:active{transform:scale(.95)}.happy{background:linear-gradient(135deg,#11998e,#38ef7d)}.neutral{background:linear-gradient(135deg,#ffd89b,#ff9a56)}.sad{background:linear-gradient(135deg,#ee0979,#ff6a00)}.thank{display:none;color:white;font-size:5rem}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="main">
+<h1>Jak oceniasz wizytę?</h1>
+<div class="buttons">
+<button class="happy" onclick="vote(1)">😊</button>
+<button class="neutral" onclick="vote(2)">😐</button>
+<button class="sad" onclick="vote(3)">☹️</button>
+</div>
+</div>
+<div id="thank" class="thank">✓ Dziękujemy!</div>
+</div>
+<script>
+let deviceId=localStorage.getItem('device_id')||'xxxxxxxx-xxxx-4xxx'.replace(/x/g,()=>(Math.random()*16|0).toString(16));localStorage.setItem('device_id',deviceId);function vote(reaction){fetch('/api/response',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reaction,device_id:deviceId,timestamp:new Date().toISOString()})});document.getElementById('main').style.display='none';document.getElementById('thank').style.display='block';setTimeout(()=>{document.getElementById('main').style.display='block';document.getElementById('thank').style.display='none'},1500)}
+</script>
+</body>
+</html>
