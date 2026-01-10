@@ -42,10 +42,13 @@ app.get('/api/admin/export.csv', (req, res) => {
   const auth = req.headers.authorization;
   if (!auth || auth !== 'Bearer ' + PASS) return res.status(401).json({ error: 'No' });
   const db = readDB();
-  let csv = 'timestamp,reaction,reaction_label,device_id\n';
+  let csv = 'date,time,reaction,reaction_label,device_id\n';
   const labels = {1: 'Great', 2: 'OK', 3: 'Bad'};
   db.responses.forEach(r => { 
-    csv += r.timestamp + ',' + r.reaction + ',' + labels[r.reaction] + ',' + r.device_id + '\n'; 
+    const dt = new Date(r.timestamp);
+    const date = dt.toISOString().split('T')[0];
+    const time = dt.toISOString().split('T')[1].split('.')[0];
+    csv += date + ',' + time + ',' + r.reaction + ',' + labels[r.reaction] + ',' + r.device_id + '\n'; 
   });
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename=feedback.csv');
