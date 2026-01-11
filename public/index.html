@@ -24,6 +24,19 @@ body {
   position: relative;
 }
 
+/* Ukryj/rozjaśnij systemowy przycisk fullscreen */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9998;
+  pointer-events: none;
+}
+
 .container {
   text-align: center;
   padding: 20px;
