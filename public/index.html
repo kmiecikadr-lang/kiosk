@@ -134,11 +134,20 @@ h1 {
   bottom: 10px;
   right: 15px;
   font-size: 11px;
-  color: #d0d0d0;
-  opacity: 0.6;
-  pointer-events: none;
+  color: #999999;
+  opacity: 0.8;
   z-index: 10000;
   font-family: -apple-system, sans-serif;
+}
+
+.watermark a {
+  color: #999999;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.watermark a:hover {
+  color: #666666;
 }
 </style>
 </head>
@@ -161,7 +170,7 @@ h1 {
 </div>
 <div id="thank" class="thank">✓ Dziękujemy!</div>
 </div>
-<div class="watermark">powered by akmiecik.pl</div>
+<div class="watermark">powered by <a href="https://akmiecik.pl" target="_blank">akmiecik.pl</a></div>
 <script>
 let deviceId=localStorage.getItem('device_id')||'xxxxxxxx-xxxx-4xxx'.replace(/x/g,()=>(Math.random()*16|0).toString(16));
 localStorage.setItem('device_id',deviceId);
