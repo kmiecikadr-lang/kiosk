@@ -21,6 +21,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 }
 
 .container {
@@ -127,6 +128,18 @@ h1 {
   height: 150px;
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
 }
+
+.watermark {
+  position: fixed;
+  bottom: 8px;
+  right: 12px;
+  font-size: 9px;
+  color: #e8e8e8;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 10000;
+  font-family: -apple-system, sans-serif;
+}
 </style>
 </head>
 <body>
@@ -148,6 +161,7 @@ h1 {
 </div>
 <div id="thank" class="thank">✓ Dziękujemy!</div>
 </div>
+<div class="watermark">powered by akmiecik.pl</div>
 <script>
 let deviceId=localStorage.getItem('device_id')||'xxxxxxxx-xxxx-4xxx'.replace(/x/g,()=>(Math.random()*16|0).toString(16));
 localStorage.setItem('device_id',deviceId);
