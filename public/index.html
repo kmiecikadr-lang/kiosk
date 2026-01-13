@@ -87,6 +87,15 @@ h1 {
   display: none;
   color: #2d3748;
   font-size: 5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.thank-logo {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
 }
 
 .fullscreen-prompt {
@@ -182,6 +191,12 @@ h1 {
   
   .thank {
     font-size: 3rem;
+    gap: 20px;
+  }
+  
+  .thank-logo {
+    width: 80px;
+    height: 80px;
   }
   
   .logo img {
@@ -217,7 +232,10 @@ h1 {
 <button class="sad" onclick="vote(3)">☹️</button>
 </div>
 </div>
-<div id="thank" class="thank">✓ Dziękujemy!</div>
+<div id="thank" class="thank">
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Logo.svg" alt="Mercedes" class="thank-logo">
+<div>✓ Dziękujemy!</div>
+</div>
 </div>
 <div class="watermark">powered by <a href="https://akmiecik.pl" target="_blank">akmiecik.pl</a></div>
 <script>
@@ -242,7 +260,7 @@ function vote(reaction){
     body:JSON.stringify({reaction,device_id:deviceId,timestamp:new Date().toISOString()})
   });
   document.getElementById('main').style.display='none';
-  document.getElementById('thank').style.display='block';
+  document.getElementById('thank').style.display='flex';
   setTimeout(()=>{
     document.getElementById('main').style.display='block';
     document.getElementById('thank').style.display='none';
