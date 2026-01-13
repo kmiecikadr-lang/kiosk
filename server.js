@@ -32,10 +32,59 @@ app.get('/api/admin/statistics', (req, res) => {
   const auth = req.headers.authorization;
   if (!auth || auth !== 'Bearer ' + PASS) return res.status(401).json({ error: 'No' });
   const db = readDB();
-  const stats = { total: db.responses.length, reactions: [1, 2, 3].map(r => ({ reaction: r, count: db.responses.filter(x => x.reaction === r).length })), daily: [] };
+  
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterdayStart = new Date(todayStart);
+  yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+  const dayBeforeStart = new Date(todayStart);
+  dayBeforeStart.setDate(dayBeforeStart.getDate() - 2);
+  const dayBeforeEnd = new Date(todayStart);
+  dayBeforeEnd.setDate(dayBeforeEnd.getDate() - 1);
+  
+  const filterByDate = (responses, startDate, endDate) => {
+    return responses.filter(r => {
+      const responseDate = new Date(r.timestamp);
+      return responseDate >= startDate && responseDate < endDate;
+    });
+  };
+  
+  const countReactions = (responses) => {
+    return [1, 2, 3].map(reaction => ({
+      reaction,
+      count: responses.filter(r => r.reaction === reaction).length
+    }));
+  };
+  
+  const allResponses = db.responses;
+  const todayResponses = filterByDate(allResponses, todayStart, new Date());
+  const yesterdayResponses = filterByDate(allResponses, yesterdayStart, todayStart);
+  const dayBeforeResponses = filterByDate(allResponses, dayBeforeStart, dayBeforeEnd);
+  
+  const stats = {
+    all: {
+      total: allResponses.length,
+      reactions: countReactions(allResponses)
+    },
+    today: {
+      total: todayResponses.length,
+      reactions: countReactions(todayResponses)
+    },
+    yesterday: {
+      total: yesterdayResponses.length,
+      reactions: countReactions(yesterdayResponses)
+    },
+    dayBefore: {
+      total: dayBeforeResponses.length,
+      reactions: countReactions(dayBeforeResponses)
+    },
+    daily: []
+  };
+  
   const dailyMap = {};
   db.responses.forEach(r => { const date = r.timestamp.split('T')[0]; dailyMap[date] = (dailyMap[date] || 0) + 1; });
   stats.daily = Object.entries(dailyMap).map(([date, count]) => ({ date, count })).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 30);
+  
   res.json({ success: true, data: stats });
 });
 
